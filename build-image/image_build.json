@@ -41,6 +41,11 @@
       "destination": "/home/ubuntu/"
     },
     {
+      "type": "file",
+      "source": "../provision.sh",
+      "destination": "/home/ubuntu/"
+    },
+    {
       "type": "shell",
       "script": "./image_setup.sh"
     }
