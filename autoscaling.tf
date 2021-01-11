@@ -28,7 +28,6 @@ resource "aws_launch_configuration" "as_conf" {
   "provision.sh"
   )
 
-
 lifecycle {
   create_before_destroy = true
 }
@@ -51,7 +50,7 @@ resource "aws_autoscaling_policy" "agents-scale-up" {
 name = "agents-scale-up"
 scaling_adjustment = 1
 adjustment_type = "ChangeInCapacity"
-cooldown = 300
+cooldown               = 300
 autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
@@ -59,7 +58,7 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
 name = "agents-scale-down"
 scaling_adjustment = -1
 adjustment_type = "ChangeInCapacity"
-cooldown = 300
+cooldown               = 300
 autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
@@ -73,7 +72,7 @@ health_check {
 healthy_threshold = 2
 unhealthy_threshold = 2
 timeout = 3
-interval = 30
+interval            = 30
 target = "HTTP:80/"
 }
 listener {

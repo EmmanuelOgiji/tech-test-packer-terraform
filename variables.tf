@@ -31,6 +31,6 @@ variable "standard_tags" {
     :
   "Emmanuel Pius-Ogiji"
   ,
-"Project": "Tech Test"
+"Project" : "Tech Test"
 }
 }
