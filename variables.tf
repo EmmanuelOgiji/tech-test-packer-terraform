@@ -1,16 +1,16 @@
 variable "region" {
-  type = string
+  type        = string
   description = "The region for deployment"
-  default = "eu-west-1"
+  default     = "eu-west-1"
 }
 
 variable "access_key" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "secret_key" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -27,10 +27,7 @@ variable "min_size" {
 
 variable "standard_tags" {
   default = {
-    "Owner"
-    :
-  "Emmanuel Pius-Ogiji"
-  ,
-"Project" : "Tech Test"
-}
+    "Owner" : "Emmanuel Pius-Ogiji",
+    "Project" : "Tech Test"
+  }
 }
