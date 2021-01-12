@@ -10,6 +10,7 @@ resource "aws_subnet" "main" {
 
 }
 
+# Security Group to be used by both instances in asg and the elb
 resource "aws_security_group" "instance_sg" {
   name        = "instance_sg"
   description = "Allow inbound traffic"

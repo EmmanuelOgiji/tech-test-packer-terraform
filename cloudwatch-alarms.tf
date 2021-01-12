@@ -1,3 +1,4 @@
+# Cloudwatch alarm for scale up action (HighCPU)
 resource "aws_cloudwatch_metric_alarm" "cpu-high" {
   alarm_name          = "cpu-util-high-asg"
   comparison_operator = "GreaterThanOrEqualToThreshold"
@@ -16,6 +17,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-high" {
   }
 }
 
+# Cloudwatch alarm for scale down action (LowCPU)
 resource "aws_cloudwatch_metric_alarm" "cpu-low" {
   alarm_name          = "cpu-util-low-asg"
   comparison_operator = "LessThanOrEqualToThreshold"
