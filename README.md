@@ -4,10 +4,19 @@ Task 1:
 Create public linux image running web server with simple web  page to hit 
 
 Solution:
+- Populate the var.json file with aws_access_key and aws_secret_key values
 Run the following commands:
 - cd build-image
-- packer build -var 'aws_access_key=<insert access key>' -var 'aws_secret_key=<insert secret key>' image_build.json
+- packer build -var-file=vars.json image_build.json
 
+Alternate Solution: Container:
+Run
+- docker run -it \
+    --mount type=bind,source=$PWD/build-image,target=/mnt/build-image \
+    hashicorp/packer:latest build \
+    --var-file /mnt/build-image/vars.json \
+    /mnt/build-image/container_image_build.json
+    
 Task 2: 
 Terraform - publish to a github, we should be able to pull down and run on our AWS account with minimal input ;
 code to build out 3 nodes using this packer image (t2.micro)
@@ -19,7 +28,7 @@ If any fixed / account specific values are needed to run Terraform that cannot b
 README in the github repo should detail any input required from the user to get things running
 
 Solution:
-- Populate terraform.tfvars with the access_key and secret_key variables
+- Populate terraform.tfvars with the access_key and secret_key values
 - From the root of directory of the repo, Run:
     - terraform apply -var-file="terraform.tfvars" and enter yes when prompted
     

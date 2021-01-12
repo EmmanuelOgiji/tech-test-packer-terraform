@@ -37,6 +37,7 @@ resource "aws_autoscaling_group" "asg" {
   desired_capacity     = var.desired_capacity
   min_size             = var.min_size
   vpc_zone_identifier  = [aws_subnet.main.id]
+  load_balancers       = [aws_elb.my_elb.name]
   max_size             = var.max_size
   health_check_grace_period = 60
   health_check_type         = "ELB"
@@ -44,7 +45,7 @@ resource "aws_autoscaling_group" "asg" {
   lifecycle {
     create_before_destroy = true
   }
-  tags       = var.standard_tags
+  tags = [var.standard_tags]
 
 }
 
@@ -62,11 +63,6 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
   adjustment_type        = "ChangeInCapacity"
   cooldown               = 300
   autoscaling_group_name = aws_autoscaling_group.asg.name
-}
-
-resource "aws_autoscaling_attachment" "asg_attachment_bar" {
-  autoscaling_group_name = aws_autoscaling_group.asg.id
-  elb                    = aws_elb.my_elb.id
 }
 
 resource "aws_elb" "my_elb" {
