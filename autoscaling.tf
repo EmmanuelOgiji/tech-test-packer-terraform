@@ -65,9 +65,6 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
-data "aws_availability_zones" "all" {}
-
-
 resource "aws_autoscaling_attachment" "asg_attachment_bar" {
   autoscaling_group_name = aws_autoscaling_group.asg.id
   elb                    = aws_elb.my_elb.id
