@@ -9,7 +9,7 @@ Run the following commands:
 - cd build-image
 - packer build -var-file=vars.json image_build.json
 
-Alternate Solution: Container:
+Alternate Solution: Container (No packer installation needed):
 Run
 - docker run -it \
     --mount type=bind,source=$PWD/build-image,target=/mnt/build-image \

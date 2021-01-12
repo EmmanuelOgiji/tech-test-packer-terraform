@@ -4,7 +4,7 @@ import { check, sleep } from 'k6';
 export let options = {
   stages: [
     { duration: '30s', target: 20 },
-    { duration: '3m30s', target: 2000},
+    { duration: '3m30s', target: 1000},
     { duration: '20s', target: 0 },
   ],
 };
@@ -14,3 +14,5 @@ export default function () {
   console.log(res)
   sleep(1);
 }
+
+//TODO: Sort out testing/stress testing for CPU Utilization and way to have just one json
