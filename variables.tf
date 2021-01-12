@@ -15,7 +15,7 @@ variable "secret_key" {
 }
 
 variable "desired_capacity" {
-  default = 1
+  default = 3
 }
 variable "max_size" {
   default = 5
