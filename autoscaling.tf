@@ -29,6 +29,8 @@ resource "aws_launch_configuration" "as_conf" {
   lifecycle {
     create_before_destroy = true
   }
+  tags       = var.standard_tags
+
 }
 
 resource "aws_autoscaling_group" "asg" {
@@ -44,6 +46,8 @@ resource "aws_autoscaling_group" "asg" {
   lifecycle {
     create_before_destroy = true
   }
+  tags       = var.standard_tags
+
 }
 
 resource "aws_autoscaling_policy" "agents-scale-up" {
