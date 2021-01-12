@@ -4,7 +4,7 @@ data "aws_ami" "my_ami" {
   filter {
     name = "name"
     values = [
-    "emmanuel-pius-ogiji-apache-ami"]
+    "emmanuel-pius-ogiji-apache-ami*"]
   }
 
   filter {
@@ -22,7 +22,7 @@ resource "aws_launch_configuration" "as_conf" {
   image_id      = data.aws_ami.my_ami.id
   instance_type = "t2.micro"
   security_groups = [
-  aws_security_group.allow_inbound_apache.id]
+  aws_security_group.instance_sg.id]
   user_data = <<-EOF
 #!/usr/bin/env bash
 echo "Updating firewall rules for Apache"
@@ -67,10 +67,17 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
 
 data "aws_availability_zones" "all" {}
 
+
+resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+  autoscaling_group_name = aws_autoscaling_group.asg.id
+  elb                    = aws_elb.my_elb.id
+}
+
 resource "aws_elb" "my_elb" {
-  name               = "emmanuel-pius-ogiji-elb"
-  availability_zones = data.aws_availability_zones.all.names
-  tags               = var.standard_tags
+  name            = "emmanuel-pius-ogiji-elb"
+  subnets         = [aws_subnet.main.id]
+  security_groups = [aws_security_group.instance_sg.id]
+  tags            = var.standard_tags
   health_check {
     healthy_threshold   = 2
     unhealthy_threshold = 2
@@ -78,10 +85,12 @@ resource "aws_elb" "my_elb" {
     interval            = 30
     target              = "HTTP:80/"
   }
+
+
   listener {
+    instance_port     = 80
+    instance_protocol = "http"
     lb_port           = 80
     lb_protocol       = "http"
-    instance_port     = "80"
-    instance_protocol = "http"
   }
 }

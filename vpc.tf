@@ -10,20 +10,21 @@ resource "aws_subnet" "main" {
 
 }
 
-resource "aws_security_group" "allow_inbound_apache" {
-  name        = "allow_inbound_apache"
+resource "aws_security_group" "instance_sg" {
+  name        = "instance_sg"
   description = "Allow inbound traffic"
   vpc_id      = aws_vpc.main.id
 
+  # HTTP access from anywhere
   ingress {
-    description = "TLS from VPC"
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
     cidr_blocks = [
     "0.0.0.0/0"]
   }
 
+  # outbound internet access
   egress {
     from_port = 0
     to_port   = 0
@@ -33,4 +34,16 @@ resource "aws_security_group" "allow_inbound_apache" {
   }
 
   tags = var.standard_tags
+}
+
+# Create an internet gateway to give our subnet access to the outside world
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.main.id
+}
+
+# Grant the VPC internet access on its main route table
+resource "aws_route" "internet_access" {
+  route_table_id         = aws_vpc.main.main_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.igw.id
 }

@@ -15,14 +15,14 @@ variable "secret_key" {
 }
 
 variable "desired_capacity" {
-  default = 3
+  default = 1
 }
 variable "max_size" {
   default = 5
 }
 
 variable "min_size" {
-  default = 3
+  default = 1
 }
 
 variable "standard_tags" {
