@@ -38,6 +38,8 @@ resource "aws_autoscaling_group" "asg" {
   min_size             = var.min_size
   vpc_zone_identifier  = [aws_subnet.main.id]
   max_size             = var.max_size
+  health_check_grace_period = 60
+  health_check_type         = "ELB"
 
   lifecycle {
     create_before_destroy = true
