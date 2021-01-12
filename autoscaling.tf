@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 data "aws_ami" "my_ami" {
   most_recent = true
 
@@ -13,8 +15,7 @@ data "aws_ami" "my_ami" {
     "hvm"]
   }
 
-  owners = [
-  "806310796880"]
+  owners = [data.aws_caller_identity.current.account_id]
 }
 
 resource "aws_launch_configuration" "as_conf" {
@@ -23,13 +24,7 @@ resource "aws_launch_configuration" "as_conf" {
   instance_type = "t2.micro"
   security_groups = [
   aws_security_group.instance_sg.id]
-  user_data = <<-EOF
-#!/usr/bin/env bash
-echo "Updating firewall rules for Apache"
-sudo ufw allow 'Apache'
-echo "Starting Apache"
-sudo systemctl start apache2
-EOF
+  user_data = "${file("provision.sh")}"
 
   lifecycle {
     create_before_destroy = true
