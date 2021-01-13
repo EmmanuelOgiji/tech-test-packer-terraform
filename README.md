@@ -35,7 +35,13 @@ Solution:
 Note terraform apply runs terraform plan inherently any way
 
 Note variables are used for the following in order to provide flexibility/reusability (with desired values set as default)
-- 
+The variable descriptions provide adequate information
+- region
+- upper_cpu_threshold
+- lower_cpu_threshold
+- desired_capacity
+- max_size
+- min_size
 
 POSSIBLE IMPROVEMENTS:
 The following are improvements that could be made but were not based on time/cost:
