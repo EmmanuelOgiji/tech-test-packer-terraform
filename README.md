@@ -42,6 +42,7 @@ The variable descriptions provide adequate information
 - desired_capacity
 - max_size
 - min_size
+- alarm_period
 
 POSSIBLE IMPROVEMENTS:
 The following are improvements that could be made but were not based on time/cost:

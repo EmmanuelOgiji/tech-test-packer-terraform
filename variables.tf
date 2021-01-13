@@ -40,6 +40,11 @@ variable "min_size" {
   default     = 1
 }
 
+variable "alarm_period" {
+  description = "The period in seconds over which the specified statistic (average in this case) is applied."
+  default = "60"
+}
+
 variable "standard_tags" {
   default = {
     "Owner" : "Emmanuel Pius-Ogiji",

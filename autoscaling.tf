@@ -45,8 +45,18 @@ resource "aws_autoscaling_group" "asg" {
   lifecycle {
     create_before_destroy = true
   }
-  tags = [var.standard_tags]
-
+  tags = [
+      {
+        "key"                 = "Owner"
+        "value"               = "Emmanuel Pius-Ogiji"
+        "propagate_at_launch" = true
+      },
+       {
+        "key"                 = "Name"
+        "value"               = "emmanuel-pius-ogiji-asg-instance"
+        "propagate_at_launch" = true
+      }
+    ]
 }
 
 resource "aws_autoscaling_policy" "agents-scale-up" {
