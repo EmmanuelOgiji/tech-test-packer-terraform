@@ -19,12 +19,17 @@ variable "secret_key" {
 variable "subnet_cidr_blocks" {
   type        = list(string)
   description = "List of cidr blocks for subnet creation. Used to give multiAZ resilience"
-  default     = ["10.0.0.0/24", "10.0.2.0/24"]
+  default     = ["10.0.0.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
 variable "upper_cpu_threshold" {
   description = "The value of average CPU Utilization (in %) which triggers a scale out"
   default     = "60"
+}
+
+variable "alarm_evaluation_periods" {
+  description = "The number of periods over which Average CPU Utilization is compared to the specified threshold"
+  default     = "1"
 }
 
 variable "lower_cpu_threshold" {

@@ -2,7 +2,7 @@
 resource "aws_cloudwatch_metric_alarm" "cpu-high" {
   alarm_name          = "cpu-util-high-asg"
   comparison_operator = "GreaterThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = var.alarm_evaluation_periods
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   period              = var.alarm_period
@@ -21,7 +21,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-high" {
 resource "aws_cloudwatch_metric_alarm" "cpu-low" {
   alarm_name          = "cpu-util-low-asg"
   comparison_operator = "LessThanOrEqualToThreshold"
-  evaluation_periods  = "2"
+  evaluation_periods  = var.alarm_evaluation_periods
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   period              = var.alarm_period

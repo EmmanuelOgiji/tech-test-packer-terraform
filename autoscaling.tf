@@ -24,7 +24,7 @@ resource "aws_launch_configuration" "as_conf" {
   instance_type = "t2.micro"
   security_groups = [
   aws_security_group.instance_sg.id]
-  user_data = file("provision.sh")
+  user_data = file("user_data.sh")
 
   lifecycle {
     create_before_destroy = true
