@@ -3,7 +3,7 @@
 Task 1:
 Create public linux image running web server with simple web  page to hit 
 
-Solution:
+Solution: (Packer installation needed)
 - Populate the var.json file with aws_access_key and aws_secret_key values
 Run the following commands:
 - cd build-image
@@ -33,3 +33,13 @@ Solution:
     - terraform apply -var-file="terraform.tfvars" and enter yes when prompted
     
 Note terraform apply runs terraform plan inherently any way
+
+Note variables are used for the following in order to provide flexibility/reusability (with desired values set as default)
+- 
+
+POSSIBLE IMPROVEMENTS:
+The following are improvements that could be made but were not based on time/cost:
+- Improve logging and monitoring:
+   - Add access logs for ELB
+   - Add flow logs for vpc
+   - Look at using the cloudwatch agent to stream logs from instances

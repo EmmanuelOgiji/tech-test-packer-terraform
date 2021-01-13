@@ -24,7 +24,7 @@ resource "aws_launch_configuration" "as_conf" {
   instance_type = "t2.micro"
   security_groups = [
   aws_security_group.instance_sg.id]
-  user_data = "${file("provision.sh")}"
+  user_data = file("provision.sh")
 
   lifecycle {
     create_before_destroy = true
@@ -32,13 +32,13 @@ resource "aws_launch_configuration" "as_conf" {
 }
 
 resource "aws_autoscaling_group" "asg" {
-  name                 = "emmanuel-pius-ogiji-asg"
-  launch_configuration = aws_launch_configuration.as_conf.name
-  desired_capacity     = var.desired_capacity
-  min_size             = var.min_size
-  vpc_zone_identifier  = [aws_subnet.main.id]
-  load_balancers       = [aws_elb.my_elb.name]
-  max_size             = var.max_size
+  name                      = "emmanuel-pius-ogiji-asg"
+  launch_configuration      = aws_launch_configuration.as_conf.name
+  desired_capacity          = var.desired_capacity
+  min_size                  = var.min_size
+  vpc_zone_identifier       = [aws_subnet.main.id]
+  load_balancers            = [aws_elb.my_elb.name]
+  max_size                  = var.max_size
   health_check_grace_period = 60
   health_check_type         = "ELB"
 

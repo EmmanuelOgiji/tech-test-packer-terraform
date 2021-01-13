@@ -7,7 +7,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-high" {
   namespace           = "AWS/EC2"
   period              = "60"
   statistic           = "Average"
-  threshold           = "60"
+  threshold           = var.upper_cpu_threshold
   alarm_description   = "This metric monitors ec2 for high CPU utilization"
   alarm_actions = [
     aws_autoscaling_policy.agents-scale-up.arn
@@ -26,7 +26,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-low" {
   namespace           = "AWS/EC2"
   period              = "60"
   statistic           = "Average"
-  threshold           = "40"
+  threshold           = var.lower_cpu_threshold
   alarm_description   = "This metric monitors ec2 for low CPU utilization"
   alarm_actions = [
     aws_autoscaling_policy.agents-scale-down.arn
