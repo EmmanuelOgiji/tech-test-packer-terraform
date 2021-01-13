@@ -36,7 +36,7 @@ resource "aws_autoscaling_group" "asg" {
   launch_configuration      = aws_launch_configuration.as_conf.name
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
-  vpc_zone_identifier       = [aws_subnet.main.id]
+  vpc_zone_identifier       = aws_subnet.main.*.id
   load_balancers            = [aws_elb.my_elb.name]
   max_size                  = var.max_size
   health_check_grace_period = 60
@@ -46,17 +46,17 @@ resource "aws_autoscaling_group" "asg" {
     create_before_destroy = true
   }
   tags = [
-      {
-        "key"                 = "Owner"
-        "value"               = "Emmanuel Pius-Ogiji"
-        "propagate_at_launch" = true
-      },
-       {
-        "key"                 = "Name"
-        "value"               = "emmanuel-pius-ogiji-asg-instance"
-        "propagate_at_launch" = true
-      }
-    ]
+    {
+      "key"                 = "Owner"
+      "value"               = "Emmanuel Pius-Ogiji"
+      "propagate_at_launch" = true
+    },
+    {
+      "key"                 = "Name"
+      "value"               = "emmanuel-pius-ogiji-asg-instance"
+      "propagate_at_launch" = true
+    }
+  ]
 }
 
 resource "aws_autoscaling_policy" "agents-scale-up" {
@@ -77,7 +77,7 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
 
 resource "aws_elb" "my_elb" {
   name            = "emmanuel-pius-ogiji-elb"
-  subnets         = [aws_subnet.main.id]
+  subnets         = aws_subnet.main.*.id
   security_groups = [aws_security_group.instance_sg.id]
   tags            = var.standard_tags
   health_check {
