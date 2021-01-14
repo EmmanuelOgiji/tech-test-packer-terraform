@@ -45,8 +45,15 @@ The variable descriptions provide adequate information
 Provide way to place load on nodes to trigger alarm
 
 ### Solution:
-As part of the launch configuration's user-data (user_data.sh), the linux tool stress is downloaded and used to stress
-the system to trigger the high CPU Utilization alarm
+The solution to this problem (mostly confined to stress-test.tf) is as follows:
+- A Cloudwatch/Eventbridge scheduled event runs every 5 mins
+- This event triggers a SSM Run command to run an SSM document
+- This document runs a command using the linux tool "stress" (installed as part of building the ami and initialized as part of the user data).
+This tool "stresses" the nodes to raise the CPU Utilization to trigger the high cpu alarm and as such the scale out action (launching new instances)
+
+The reasons for this solution are as follows:
+- Automation: It was deemed important to make usage of the solution easier to use
+- Security: Avoiding SSH in "production" is usually advised as issues with key pairs are avoided
 
 
 # POSSIBLE IMPROVEMENTS:
@@ -55,3 +62,5 @@ The following are improvements that could be made but were not based on time/cos
    - Add access logs for ELB
    - Add flow logs for vpc
    - Look at using the cloudwatch agent to stream logs from instances for debugging
+   - Set up logging for SSM Run Command in S3 or Cloudwatch
+   - Use SNS topic for notifications (preferably by email) on Autoscaling events, Cloudwatch event rule triggering etc
