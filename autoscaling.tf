@@ -45,9 +45,9 @@ resource "aws_iam_instance_profile" "instance_profile_ssm" {
 }
 
 resource "aws_launch_configuration" "as_conf" {
-  name_prefix   = "emmanuel-pius-ogiji-lc-"
-  image_id      = data.aws_ami.my_ami.id
-  instance_type = "t2.micro"
+  name_prefix          = "emmanuel-pius-ogiji-lc-"
+  image_id             = data.aws_ami.my_ami.id
+  instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.instance_profile_ssm.name
   security_groups = [
   aws_security_group.instance_sg.id]

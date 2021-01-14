@@ -57,13 +57,13 @@ variable "alarm_period" {
 }
 
 variable "scale_down_cooldown" {
-        description = "The number of seconds between scaling in activities"
-        default = 60
+  description = "The number of seconds between scaling in activities"
+  default     = 60
 }
 
 variable "scale_up_cooldown" {
-        description = "The number of seconds between scaling in activities"
-        default = 120
+  description = "The number of seconds between scaling in activities"
+  default     = 120
 }
 
 variable "standard_tags" {

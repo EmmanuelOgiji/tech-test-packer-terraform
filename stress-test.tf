@@ -60,7 +60,7 @@ resource "aws_ssm_document" "trigger_asg_stress" {
          "name": "RunStress",
          "inputs": {
             "runCommand": [
-               "sudo stress -c 50 -v --timeout 600s"
+               "sudo stress -c 50 -v --timeout 450s"
             ]
          }
       }
