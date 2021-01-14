@@ -29,7 +29,7 @@ variable "upper_cpu_threshold" {
 
 variable "alarm_evaluation_periods" {
   description = "The number of periods over which Average CPU Utilization is compared to the specified threshold"
-  default     = "2"
+  default     = "1"
 }
 
 variable "lower_cpu_threshold" {
@@ -63,7 +63,7 @@ variable "scale_down_cooldown" {
 
 variable "scale_up_cooldown" {
   description = "The number of seconds between scaling in activities"
-  default     = 120
+  default     = 90
 }
 
 variable "standard_tags" {
