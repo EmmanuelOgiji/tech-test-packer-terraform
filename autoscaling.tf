@@ -18,10 +18,37 @@ data "aws_ami" "my_ami" {
   owners = [data.aws_caller_identity.current.account_id]
 }
 
+data "aws_iam_policy_document" "instance_profile_trust" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "instance_profile_ssm" {
+  name               = "instance-profile-ssm"
+  assume_role_policy = data.aws_iam_policy_document.instance_profile_trust.json
+}
+
+resource "aws_iam_role_policy_attachment" "instance_profile_ssm" {
+  role       = aws_iam_role.instance_profile_ssm.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_instance_profile" "instance_profile_ssm" {
+  name = "instance_profile_ssm"
+  role = aws_iam_role.instance_profile_ssm.name
+}
+
 resource "aws_launch_configuration" "as_conf" {
   name_prefix   = "emmanuel-pius-ogiji-lc-"
   image_id      = data.aws_ami.my_ami.id
   instance_type = "t2.micro"
+  iam_instance_profile = aws_iam_instance_profile.instance_profile_ssm.name
   security_groups = [
   aws_security_group.instance_sg.id]
   user_data = file("user_data.sh")
