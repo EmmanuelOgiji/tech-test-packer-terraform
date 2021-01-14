@@ -41,6 +41,8 @@ The variable descriptions provide adequate information
 - min_size
 - alarm_evaluation_periods
 
+At the end of the "apply", the dns to access the webpage is output on the terminal
+
 ## Task 3:
 Provide way to place load on nodes to trigger alarm
 
