@@ -6,7 +6,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-high" {
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   period              = var.alarm_period
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = var.upper_cpu_threshold
   alarm_description   = "This metric monitors ec2 for high CPU utilization"
   alarm_actions = [
@@ -25,7 +25,7 @@ resource "aws_cloudwatch_metric_alarm" "cpu-low" {
   metric_name         = "CPUUtilization"
   namespace           = "AWS/EC2"
   period              = var.alarm_period
-  statistic           = "Maximum"
+  statistic           = "Average"
   threshold           = var.lower_cpu_threshold
   alarm_description   = "This metric monitors ec2 for low CPU utilization"
   alarm_actions = [

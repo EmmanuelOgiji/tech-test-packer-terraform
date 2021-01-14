@@ -60,7 +60,7 @@ resource "aws_ssm_document" "trigger_asg_stress" {
          "name": "RunStress",
          "inputs": {
             "runCommand": [
-               "sudo stress -c 50 -v --timeout 300s"
+               "sudo stress -c 50 -v --timeout 600s"
             ]
          }
       }
@@ -72,7 +72,7 @@ DOC
 resource "aws_cloudwatch_event_rule" "trigger_stress" {
   name                = "trigger-asg-stress"
   description         = "Triggers stress to run every 5 mins"
-  schedule_expression = "rate(2 minutes)"
+  schedule_expression = "rate(5 minutes)"
   tags                = var.standard_tags
 }
 
