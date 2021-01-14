@@ -56,6 +56,16 @@ variable "alarm_period" {
   default     = "60"
 }
 
+variable "scale_down_cooldown" {
+        description = "The number of seconds between scaling in activities"
+        default = 180
+}
+
+variable "scale_up_cooldown" {
+        description = "The number of seconds between scaling in activities"
+        default = 240
+}
+
 variable "standard_tags" {
   default = {
     "Owner" : "Emmanuel Pius-Ogiji",

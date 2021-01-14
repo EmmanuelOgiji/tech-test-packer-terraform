@@ -18,7 +18,7 @@ data "aws_iam_policy_document" "ssm_lifecycle" {
     condition {
       test     = "StringEquals"
       variable = "ec2:ResourceTag/aws:autoscaling:groupName"
-      values   = ["aws_autoscaling_group.asg.name"]
+      values   = [aws_autoscaling_group.asg.name]
     }
   }
 
@@ -72,7 +72,7 @@ DOC
 resource "aws_cloudwatch_event_rule" "trigger_stress" {
   name                = "trigger-asg-stress"
   description         = "Triggers stress to run every 5 mins"
-  schedule_expression = "rate(5 minutes)"
+  schedule_expression = "rate(2 minutes)"
   tags                = var.standard_tags
 }
 
@@ -83,7 +83,7 @@ resource "aws_cloudwatch_event_target" "trigger_stress" {
   role_arn  = aws_iam_role.ssm_lifecycle.arn
 
   run_command_targets {
-    key    = "aws:autoscaling:groupName"
+    key    = "tag:aws:autoscaling:groupName"
     values = [aws_autoscaling_group.asg.name]
   }
 }

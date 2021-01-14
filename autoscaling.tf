@@ -90,7 +90,7 @@ resource "aws_autoscaling_policy" "agents-scale-up" {
   name                   = "agents-scale-up"
   scaling_adjustment     = 1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
+  cooldown               = var.scale_up_cooldown
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
@@ -98,7 +98,7 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
   name                   = "agents-scale-down"
   scaling_adjustment     = -1
   adjustment_type        = "ChangeInCapacity"
-  cooldown               = 300
+  cooldown               = var.scale_down_cooldown
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
