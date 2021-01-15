@@ -1,49 +1,4 @@
-data "aws_iam_policy_document" "ssm_lifecycle_trust" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["events.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "ssm_lifecycle" {
-  statement {
-    effect    = "Allow"
-    actions   = ["ssm:SendCommand"]
-    resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "ec2:ResourceTag/aws:autoscaling:groupName"
-      values   = [aws_autoscaling_group.asg.name]
-    }
-  }
-
-  statement {
-    effect    = "Allow"
-    actions   = ["ssm:SendCommand"]
-    resources = [aws_ssm_document.trigger_asg_stress.arn]
-  }
-}
-
-resource "aws_iam_role" "ssm_lifecycle" {
-  name               = "SSMLifecycle"
-  assume_role_policy = data.aws_iam_policy_document.ssm_lifecycle_trust.json
-}
-
-resource "aws_iam_policy" "ssm_lifecycle" {
-  name   = "SSMLifecycle"
-  policy = data.aws_iam_policy_document.ssm_lifecycle.json
-}
-
-resource "aws_iam_role_policy_attachment" "ssm_lifecycle" {
-  role       = aws_iam_role.ssm_lifecycle.name
-  policy_arn = aws_iam_policy.ssm_lifecycle.arn
-}
-
+# SSM Document with command to run stress for 5 mins
 resource "aws_ssm_document" "trigger_asg_stress" {
   name          = "trigger-asg-stress"
   document_type = "Command"
@@ -60,7 +15,7 @@ resource "aws_ssm_document" "trigger_asg_stress" {
          "name": "RunStress",
          "inputs": {
             "runCommand": [
-               "sudo stress -c 50 -v --timeout 450s"
+               "sudo stress -c 50 -v --timeout 300s"
             ]
          }
       }
@@ -69,6 +24,7 @@ resource "aws_ssm_document" "trigger_asg_stress" {
 DOC
 }
 
+# Eventbridge/Cloudwatch event rule to trigger every 10 mins
 resource "aws_cloudwatch_event_rule" "trigger_stress" {
   name                = "trigger-asg-stress"
   description         = "Triggers stress to run every 10 mins"
@@ -76,6 +32,7 @@ resource "aws_cloudwatch_event_rule" "trigger_stress" {
   tags                = var.standard_tags
 }
 
+# Set Eventbridge/Cloudwatch event rule to run SSM command on ASG instances
 resource "aws_cloudwatch_event_target" "trigger_stress" {
   target_id = "trigger-asg-stress"
   arn       = aws_ssm_document.trigger_asg_stress.arn
@@ -87,4 +44,6 @@ resource "aws_cloudwatch_event_target" "trigger_stress" {
     values = [aws_autoscaling_group.asg.name]
   }
 }
+
+#
 

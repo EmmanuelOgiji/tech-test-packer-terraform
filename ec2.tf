@@ -1,5 +1,6 @@
 data "aws_caller_identity" "current" {}
 
+# Data source to get id of ami built by packer
 data "aws_ami" "my_ami" {
   most_recent = true
 
@@ -18,32 +19,7 @@ data "aws_ami" "my_ami" {
   owners = [data.aws_caller_identity.current.account_id]
 }
 
-data "aws_iam_policy_document" "instance_profile_trust" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ec2.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "instance_profile_ssm" {
-  name               = "instance-profile-ssm"
-  assume_role_policy = data.aws_iam_policy_document.instance_profile_trust.json
-}
-
-resource "aws_iam_role_policy_attachment" "instance_profile_ssm" {
-  role       = aws_iam_role.instance_profile_ssm.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-}
-
-resource "aws_iam_instance_profile" "instance_profile_ssm" {
-  name = "instance_profile_ssm"
-  role = aws_iam_role.instance_profile_ssm.name
-}
-
+# Autoscaling group launch configuration
 resource "aws_launch_configuration" "as_conf" {
   name_prefix          = "emmanuel-pius-ogiji-lc-"
   image_id             = data.aws_ami.my_ami.id
@@ -58,9 +34,11 @@ resource "aws_launch_configuration" "as_conf" {
   }
 }
 
+# Autoscaling group
 resource "aws_autoscaling_group" "asg" {
   name                      = "emmanuel-pius-ogiji-asg"
   launch_configuration      = aws_launch_configuration.as_conf.name
+  enabled_metrics           = ["GroupInServiceInstances"]
   desired_capacity          = var.desired_capacity
   min_size                  = var.min_size
   vpc_zone_identifier       = aws_subnet.main.*.id
@@ -86,6 +64,7 @@ resource "aws_autoscaling_group" "asg" {
   ]
 }
 
+# Autoscaling policy to scale up number of instances
 resource "aws_autoscaling_policy" "agents-scale-up" {
   name                   = "agents-scale-up"
   scaling_adjustment     = 1
@@ -94,6 +73,7 @@ resource "aws_autoscaling_policy" "agents-scale-up" {
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
+# Autoscaling policy to scale down number of instances
 resource "aws_autoscaling_policy" "agents-scale-down" {
   name                   = "agents-scale-down"
   scaling_adjustment     = -1
@@ -102,6 +82,7 @@ resource "aws_autoscaling_policy" "agents-scale-down" {
   autoscaling_group_name = aws_autoscaling_group.asg.name
 }
 
+# Elastic Load Balancer
 resource "aws_elb" "my_elb" {
   name            = "emmanuel-pius-ogiji-elb"
   subnets         = aws_subnet.main.*.id

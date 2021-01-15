@@ -35,3 +35,6 @@ resource "aws_cloudwatch_metric_alarm" "cpu-low" {
     AutoScalingGroupName = aws_autoscaling_group.asg.name
   }
 }
+
+# Cloudwatch dashboard to monitor number of Instances in Autoscaling Group
+
