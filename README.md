@@ -67,6 +67,8 @@ The reasons for this solution (over alternatives like SSH) are as follows:
 
 # POSSIBLE IMPROVEMENTS:
 The following are improvements that could be made but were not based on time/cost:
+- Image building:
+   - Consolidate to one json file that can be used for both containers and local packer versions
 - Improve logging and monitoring:
    - Add access logs for ELB
    - Add flow logs for vpc
