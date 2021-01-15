@@ -1,3 +1,4 @@
+# VPC
 resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
@@ -5,6 +6,7 @@ resource "aws_vpc" "main" {
   tags                 = var.standard_tags
 }
 
+# Data source to get availability zones
 data "aws_availability_zones" "all" {}
 
 # Multiple subnets for multi-az
@@ -64,22 +66,10 @@ resource "aws_route" "internet_access" {
   gateway_id             = aws_internet_gateway.igw.id
 }
 
-
+# Endpoint services for SSM connection
 data "aws_vpc_endpoint_service" "ssm" {
   service      = "ssm"
   service_type = "Interface"
-}
-
-resource "aws_vpc_endpoint" "ssm" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = data.aws_vpc_endpoint_service.ssm.service_name
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = aws_subnet.main.*.id
-  security_group_ids = [
-    aws_security_group.instance_sg.id,
-  ]
-
-  private_dns_enabled = true
 }
 
 data "aws_vpc_endpoint_service" "ssmmessages" {
@@ -87,26 +77,26 @@ data "aws_vpc_endpoint_service" "ssmmessages" {
   service_type = "Interface"
 }
 
-resource "aws_vpc_endpoint" "ssmmessages" {
-  vpc_id            = aws_vpc.main.id
-  service_name      = data.aws_vpc_endpoint_service.ssmmessages.service_name
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = aws_subnet.main.*.id
-  security_group_ids = [
-    aws_security_group.instance_sg.id,
-  ]
-
-  private_dns_enabled = true
-}
-
 data "aws_vpc_endpoint_service" "ec2messages" {
   service      = "ec2messages"
   service_type = "Interface"
 }
 
-resource "aws_vpc_endpoint" "ec2messages" {
+# Use local var to build list of endpoint services
+locals {
+  endpoint_services = [
+    data.aws_vpc_endpoint_service.ssm.service_name,
+    data.aws_vpc_endpoint_service.ssmmessages.service_name,
+    data.aws_vpc_endpoint_service.ec2messages.service_name
+  ]
+}
+
+
+# Interface VPC endpoints for SSM Connection
+resource "aws_vpc_endpoint" "ssm" {
+  count             = length(local.endpoint_services)
   vpc_id            = aws_vpc.main.id
-  service_name      = data.aws_vpc_endpoint_service.ec2messages.service_name
+  service_name      = local.endpoint_services[count.index]
   vpc_endpoint_type = "Interface"
   subnet_ids        = aws_subnet.main.*.id
   security_group_ids = [

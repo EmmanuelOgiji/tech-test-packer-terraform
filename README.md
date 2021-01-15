@@ -43,6 +43,10 @@ The variable descriptions provide adequate information
 
 At the end of the "apply", the dns to access the webpage is output on the terminal
 
+Notes:
+- Multiple subnets in different availability zones created to make deployment Multi-AZ (more available) in line with
+good practice.
+
 ## Task 3:
 Provide way to place load on nodes to trigger alarm
 
