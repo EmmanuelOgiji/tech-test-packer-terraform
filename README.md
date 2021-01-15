@@ -48,10 +48,10 @@ Provide way to place load on nodes to trigger alarm
 
 ### Solution:
 The solution to this problem (mostly confined to stress-test.tf) is as follows:
-- A Cloudwatch/Eventbridge scheduled event runs every 10 mins
+- A Cloudwatch/Eventbridge scheduled event runs every 20 mins
 - This event triggers a SSM Run command to run an SSM document
 - This document runs a command using the linux tool "stress" (installed as part of building the ami and initialized as part of the user data).
-This command "stresses" the nodes for 5 mins to raise the CPU Utilization to trigger the high cpu alarm and as such the scale out action (launching new instances)
+This command "stresses" the nodes for 7.5 mins to raise the CPU Utilization to trigger the high cpu alarm and as such the scale out action (launching new instances)
 
 The reasons for this solution are as follows:
 - Automation: It was deemed important to make usage of the solution easier to use
@@ -67,4 +67,6 @@ The following are improvements that could be made but were not based on time/cos
    - Set up logging for SSM Run Command in S3 or Cloudwatch
    - Use SNS topic for notifications (preferably by email) on Autoscaling events, Cloudwatch event rule triggering etc
 - Improve efficiency:
-  - Look at triggering SSM Run command by events/metrics e.g number of instances rather than schedule
+  - Look at triggering SSM Run command by events/metrics e.g number of instances rather than schedule. A Cloudwatch alarm
+was considered but the lack of direct targetting to means SNS+Lambda integration is needed to implement it thus decided
+against
