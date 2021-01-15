@@ -68,5 +68,5 @@ The following are improvements that could be made but were not based on time/cos
    - Use SNS topic for notifications (preferably by email) on Autoscaling events, Cloudwatch event rule triggering etc
 - Improve efficiency:
   - Look at triggering SSM Run command by events/metrics e.g number of instances rather than schedule. A Cloudwatch alarm
-was considered but the lack of direct targetting to means SNS+Lambda integration is needed to implement it thus decided
+was considered but the lack of direct targetting to SSM means SNS+Lambda integration is needed to implement it thus decided
 against
