@@ -37,4 +37,36 @@ resource "aws_cloudwatch_metric_alarm" "cpu-low" {
 }
 
 # Cloudwatch dashboard to monitor number of Instances in Autoscaling Group
+resource "aws_cloudwatch_dashboard" "asg_instances" {
+  dashboard_name = "emmanuel-pius-ogiji-instances-in-service"
 
+  dashboard_body = <<EOF
+{
+  "widgets": [
+    {
+      "type": "metric",
+      "width": 18,
+      "height": 6,
+      "start": "-PT3H",
+      "end": "P0D",
+      "properties": {
+        "metrics": [
+          [
+            "AWS/AutoScaling",
+            "GroupInServiceInstances",
+            "AutoScalingGroupName",
+            "${aws_autoscaling_group.asg.name}"
+          ]
+        ],
+        "view": "timeSeries",
+        "stacked": false,
+        "period": 60,
+        "stat": "Maximum",
+        "region": "${var.region}",
+        "title": "emmanuel-pius-ogiji-instances-in-service"
+      }
+    }
+  ]
+}
+EOF
+}
