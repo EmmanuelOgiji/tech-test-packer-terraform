@@ -27,7 +27,7 @@ resource "aws_launch_configuration" "as_conf" {
   iam_instance_profile = aws_iam_instance_profile.instance_profile_ssm.name
   security_groups = [
   aws_security_group.instance_sg.id]
-  user_data = file("user_data.sh")
+  user_data = file("bootstrap/user_data.sh")
 
   lifecycle {
     create_before_destroy = true

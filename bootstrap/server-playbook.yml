@@ -1,0 +1,13 @@
+- name: 'Start Server'
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Restart apache2
+      service:
+        name: apache2
+        state: restarted
+    - name: Check SSM agent started
+      service:
+        name: snap.amazon-ssm-agent.amazon-ssm-agent.service
+        state: started
