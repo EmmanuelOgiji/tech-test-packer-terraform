@@ -14,7 +14,9 @@
       "source_ami_filter": {
         "filters": {
           "virtualization-type": "hvm",
-          "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+          "architecture": "x86_64",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+          "block-device-mapping.volume-type": "gp2",
           "root-device-type": "ebs"
         },
         "owners": [
@@ -36,13 +38,9 @@
   ],
   "provisioners": [
     {
-      "type": "file",
-      "source": "./index.html",
-      "destination": "/home/ubuntu/"
-    },
-    {
-      "type": "shell",
-      "script": "./image_setup.sh"
+      "type": "ansible",
+      "playbook_file": "./image-build-playbook.yml",
+      "user": "ubuntu"
     }
   ]
 }
