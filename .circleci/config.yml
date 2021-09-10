@@ -8,19 +8,13 @@ workflows:
         - packer build:
             requires:
               - packer validate
-        - terraform plan and apply:
+        - terraform plan, apply and test:
             requires:
               - terraform validate
               - packer build
             filters:
               branches:
                 only: main
-#        - test webserver output:
-#          requires:
-#            - terraform apply
-#          filters:
-#              branches:
-#                only: main
 
 jobs:
   packer validate:
@@ -64,7 +58,7 @@ jobs:
             cd build-image
             packer build image_build.json
 
-  terraform plan and apply:
+  terraform plan, apply and test:
     docker:
       - image: hashicorp/terraform
     steps:
@@ -75,3 +69,8 @@ jobs:
             terraform init
             terraform plan
             terraform apply -auto-approve
+      - run:
+          name: test server output
+          command: |
+            url=terraform output -raw elb_dns_name
+            curl "$url" | grep "Emmanuel Pius-Ogiji"
