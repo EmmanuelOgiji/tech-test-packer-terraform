@@ -8,11 +8,17 @@ workflows:
         - packer build:
             requires:
               - packer validate
-        - terraform plan, apply and test:
+        - terraform plan and apply:
             requires:
               - terraform validate
               - packer build
             filters:
+              branches:
+                only: main
+        - test web server output:
+          requires:
+            - terraform apply
+          filters:
               branches:
                 only: main
 
@@ -24,8 +30,7 @@ jobs:
       - checkout
       - run:
           name: install ansible
-          command: |
-            apk add ansible
+          command: apk add ansible
       - run:
           name: packer validate
           command: |
@@ -50,8 +55,7 @@ jobs:
       - checkout
       - run:
           name: install ansible
-          command: |
-            apk add ansible
+          command: apk add ansible
       - run:
           name: packer build
           command: |
@@ -69,8 +73,25 @@ jobs:
             terraform init
             terraform plan
             terraform apply -auto-approve
-      - run:
-          name: test server output
-          command: |
-            url=terraform output -raw elb_dns_name
-            curl "$url" | grep "Emmanuel Pius-Ogiji"
+            url=$(terraform output -raw elb_dns_name)
+            echo "export URL=${url}" > workspace/url.sh
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - url.sh
+
+  test web server output:
+    docker:
+      - image: alpine
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+          source /tmp/workspace/url.sh
+          server_output=$(curl "$URL")
+          echo "${server_output}" | grep "Emmanuel Pius-Ogiji"
+          if [[ $? -eq 0 ]]; then
+            echo "Server has expected text. Happy days!"
+          else
+            echo "Server does not have expected text"; exit 1
+          fi
