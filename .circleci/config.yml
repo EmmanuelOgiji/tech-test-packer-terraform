@@ -89,7 +89,7 @@ jobs:
           at: /tmp/workspace
       - run: |
           source /tmp/workspace/url.sh
-          server_output=$(curl "$URL")
+          server_output=$(wget -O- "$URL")
           echo "${server_output}" | grep "Emmanuel Pius-Ogiji"
           if [[ $? -eq 0 ]]; then
             echo "Server has expected text. Happy days!"
