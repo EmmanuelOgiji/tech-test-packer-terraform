@@ -17,7 +17,7 @@ workflows:
                 only: main
         - test web server output:
           requires:
-            - terraform apply
+            - terraform plan and apply
           filters:
               branches:
                 only: main
