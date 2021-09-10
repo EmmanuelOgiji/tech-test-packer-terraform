@@ -32,9 +32,9 @@ jobs:
       - run:
           name: install ansible
           command: |
-            sudo apt-get -y update
-            sudo apt-add-repository --yes --update ppa:ansible/ansible
-            sudo apt-get install ansible -y
+            apt-get -y update
+            apt-add-repository --yes --update ppa:ansible/ansible
+            apt-get install ansible -y
       - run:
           name: packer validate
           command: |
