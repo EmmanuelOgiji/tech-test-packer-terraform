@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  ansible-playbook: orbss/ansible-playbook@0.0.5
+  python: circleci/python@1.2
 
 workflows:
   WebServerDeployment:
@@ -31,7 +31,9 @@ jobs:
       - image: hashicorp/packer
     steps:
       - checkout
-      - ansible-playbook/install
+      - python/install-packages:
+          pkg-manager: pip
+          pip-dependency-file: build-image/requirements.txt
       - run:
           name: packer validate
           command: |
