@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+
 workflows:
   WebServerDeployment:
       jobs:
@@ -28,10 +31,7 @@ jobs:
       - image: hashicorp/packer
     steps:
       - checkout
-      - run:
-          name: install ansible
-          command: |
-            pip install ansible
+      - ansible-playbook/install
       - run:
           name: packer validate
           command: |
