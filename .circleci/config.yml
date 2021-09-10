@@ -11,7 +11,7 @@ workflows:
         - terraform plan and apply:
           requires:
             - packer validate
-            - terraform validate and plan
+            - terraform validate
             - packer build
           filters:
             branches:
