@@ -38,6 +38,14 @@
   ],
   "provisioners": [
     {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get -y update",
+        "sudo apt-add-repository --yes --update ppa:ansible/ansible",
+        "sudo apt-get install ansible -y"
+      ]
+    },
+    {
       "type": "ansible",
       "playbook_file": "./image-build-playbook.yml",
       "user": "ubuntu"

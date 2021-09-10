@@ -30,6 +30,12 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install ansible
+          command: |
+            sudo apt-get -y update
+            sudo apt-add-repository --yes --update ppa:ansible/ansible
+            sudo apt-get install ansible -y
+      - run:
           name: packer validate
           command: |
             cd build-image
@@ -53,7 +59,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: packer validate
+          name: packer build
           command: |
             cd build-image
-            packer image_build.json
+            packer build image_build.json
