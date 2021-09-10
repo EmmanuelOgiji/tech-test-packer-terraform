@@ -74,6 +74,7 @@ jobs:
             terraform plan
             terraform apply -auto-approve
             url=$(terraform output -raw elb_dns_name)
+            mkdir workspace
             echo "export URL=${url}" > workspace/url.sh
       - persist_to_workspace:
           root: workspace
