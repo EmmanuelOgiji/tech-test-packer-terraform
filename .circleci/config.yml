@@ -9,13 +9,13 @@ workflows:
             requires:
               - packer validate
         - terraform plan and apply:
-          requires:
-            - packer validate
-            - terraform validate
-            - packer build
-          filters:
-            branches:
-              only: main
+            requires:
+              - packer validate
+              - terraform validate
+              - packer build
+            filters:
+              branches:
+                only: main
 #        - test webserver output:
 #          requires:
 #            - terraform apply
