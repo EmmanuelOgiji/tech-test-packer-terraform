@@ -8,14 +8,6 @@ Create public linux image running web server with simple web  page to hit
 Run the following commands:
 - cd build-image
 - packer build -var-file=vars.json image_build.json
-
-### Alternate Solution: Container (No packer installation needed):
-Run
-- docker run -it \
-    --mount type=bind,source=$PWD/build-image,target=/mnt/build-image \
-    hashicorp/packer:latest build \
-    --var-file /mnt/build-image/vars.json \
-    /mnt/build-image/container_image_build.json
     
 ## Task 2: 
 Terraform - publish to a github, we should be able to pull down and run on our AWS account with minimal input ;
