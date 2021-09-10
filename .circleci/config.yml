@@ -10,7 +10,6 @@ workflows:
               - packer validate
         - terraform plan and apply:
             requires:
-              - packer validate
               - terraform validate
               - packer build
             filters:
@@ -32,9 +31,7 @@ jobs:
       - run:
           name: install ansible
           command: |
-            apt-get -y update
-            apt-add-repository --yes --update ppa:ansible/ansible
-            apt-get install ansible -y
+            pip install ansible
       - run:
           name: packer validate
           command: |
