@@ -16,11 +16,11 @@ workflows:
               branches:
                 only: main
         - test web server output:
-          requires:
-            - terraform plan and apply
-          filters:
-              branches:
-                only: main
+            requires:
+              - terraform plan and apply
+            filters:
+                branches:
+                  only: main
 
 jobs:
   packer validate:
@@ -62,7 +62,7 @@ jobs:
             cd build-image
             packer build image_build.json
 
-  terraform plan, apply and test:
+  terraform plan and apply:
     docker:
       - image: hashicorp/terraform
     steps:
