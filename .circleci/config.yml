@@ -6,20 +6,20 @@ workflows:
         - packer validate
         - terraform validate and plan
         - packer build
-        - terraform apply:
-          requires:
-            - packer validate
-            - terraform validate and plan
-            - packer build
-            filters:
-              branches:
-                only: main
-        - test webserver output:
-          requires:
-            - terraform apply
-            filters:
-              branches:
-                only: main
+#        - terraform apply:
+#          requires:
+#            - packer validate
+#            - terraform validate and plan
+#            - packer build
+#          filters:
+#            branches:
+#              only: main
+#        - test webserver output:
+#          requires:
+#            - terraform apply
+#          filters:
+#              branches:
+#                only: main
 
 jobs:
   packer validate:
