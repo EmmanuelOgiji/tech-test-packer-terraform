@@ -4,18 +4,18 @@ workflows:
   WebServerDeployment:
       jobs:
         - packer validate
-        - terraform validate and plan
+        - terraform validate
         - packer build:
             requires:
               - packer validate
-#        - terraform apply:
-#          requires:
-#            - packer validate
-#            - terraform validate and plan
-#            - packer build
-#          filters:
-#            branches:
-#              only: main
+        - terraform plan and apply:
+          requires:
+            - packer validate
+            - terraform validate and plan
+            - packer build
+          filters:
+            branches:
+              only: main
 #        - test webserver output:
 #          requires:
 #            - terraform apply
@@ -41,17 +41,16 @@ jobs:
             cd build-image
             packer validate image_build.json
 
-  terraform validate and plan:
+  terraform validate:
     docker:
       - image: hashicorp/terraform
     steps:
       - checkout
       - run:
-          name: terraform validate and plan
+          name: terraform validate
           command: |
             terraform init
             terraform validate
-            terraform plan
 
   packer build:
     docker:
@@ -63,3 +62,15 @@ jobs:
           command: |
             cd build-image
             packer build image_build.json
+
+  terraform plan and apply:
+    docker:
+      - image: hashicorp/terraform
+    steps:
+      - checkout
+      - run:
+          name: terraform plan and apply
+          command: |
+            terraform init
+            terraform plan
+            terraform apply -auto-approve
