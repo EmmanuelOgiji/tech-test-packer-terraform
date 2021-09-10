@@ -1,0 +1,58 @@
+version: 2.1
+
+workflows:
+  WebServerDeployment:
+      jobs:
+        - packer validate
+        - terraform validate and plan
+        - packer build
+        - terraform apply:
+          requires:
+            - packer validate
+            - terraform validate and plan
+            - packer build
+            filters:
+              branches:
+                only: main
+        - test webserver output:
+          requires:
+            - terraform apply
+            filters:
+              branches:
+                only: main
+
+jobs:
+  packer validate:
+    docker:
+      - image: hashicorp/packer
+    steps:
+      - checkout
+      - run:
+          name: packer validate
+          command: |
+            cd build-image
+            packer init
+            packer validate
+
+  terraform validate and plan:
+    docker:
+      - image: hashicorp/terraform
+    steps:
+      - checkout
+      - run:
+          name: terraform validate and plan
+          command: |
+            terraform init
+            terraform validate
+            terraform plan
+
+  packer build:
+    docker:
+      - image: hashicorp/packer
+    steps:
+      - checkout
+      - run:
+          name: packer validate
+          command: |
+            cd build-image
+            packer image_build.json
