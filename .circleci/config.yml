@@ -5,21 +5,23 @@ workflows:
       jobs:
         - packer validate
         - terraform validate and plan
-        - packer build
-        - terraform apply:
-          requires:
-            - packer validate
-            - terraform validate and plan
-            - packer build
-            filters:
-              branches:
-                only: main
-        - test webserver output:
-          requires:
-            - terraform apply
-            filters:
-              branches:
-                only: main
+        - packer build:
+            requires:
+              - packer validate
+#        - terraform apply:
+#          requires:
+#            - packer validate
+#            - terraform validate and plan
+#            - packer build
+#          filters:
+#            branches:
+#              only: main
+#        - test webserver output:
+#          requires:
+#            - terraform apply
+#          filters:
+#              branches:
+#                only: main
 
 jobs:
   packer validate:
@@ -31,8 +33,7 @@ jobs:
           name: packer validate
           command: |
             cd build-image
-            packer init
-            packer validate
+            packer validate image_build.json
 
   terraform validate and plan:
     docker:
