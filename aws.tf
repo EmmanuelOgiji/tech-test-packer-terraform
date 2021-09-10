@@ -6,6 +6,11 @@ terraform {
       version = "~> 3.23.0"
     }
   }
+  backend "s3" {
+    bucket = "emmanuel-pius-ogiji-tf-states"
+    key    = "tfstate/tech-test-packer.tfstate"
+    region = "eu-west-1"
+  }
 }
 
 provider "aws" {
