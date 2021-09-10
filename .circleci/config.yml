@@ -55,6 +55,10 @@ jobs:
     steps:
       - checkout
       - run:
+          name: install ansible
+          command: |
+            apk add ansible
+      - run:
           name: packer build
           command: |
             cd build-image
